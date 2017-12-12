@@ -1,0 +1,3 @@
+[submodule "ToDoList"]
+	path = ToDoList
+	url = https://github.com/dedieuma/ToDoList
