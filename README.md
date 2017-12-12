@@ -15,26 +15,26 @@ Installation :
       git clone https://github.com/AlexDmr/TodoListServer.git
 
 2) se placer dans le dossier ToDoListServer créé
-    cd ToDoListServer
+    -> cd ToDoListServer
     
 3) cloner notre ToDoList dans le dossier ToDoListServer
-    git clone https://github.com/dedieuma/ToDoList
+    -> git clone https://github.com/dedieuma/ToDoList
     
 4) toujours dans le même dossier, installer les dépendances du serveur
-    npm install
+    -> npm install
     
 5) toujours dans le même dossier, compiler
-    npm run compile
+    -> npm run compile
     
 6) toujours dans le même dossier, exécuter le serveur
-    npm run server
+    -> npm run server
     
 6) se placer dans le dossier ToDoList, installer les dépendances
-    cd ToDoList;
+    -> cd ToDoList;
     npm install
     
 7) lancer le client
-    npm start
+    -> npm start
     
 8) aller sur la page localhost:8080 pour s'authentifier sur le serveur
 
