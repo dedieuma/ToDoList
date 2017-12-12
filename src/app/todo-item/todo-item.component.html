@@ -1,10 +1,32 @@
-<section>
-  <input #isChecked type="checkbox" [ngModel]="item.checked" (ngModelChange)="check(isChecked.checked)" />
-  <label *ngIf="!isEditingLabel()" (dblclick)="editLabel(true)">
-    {{item.label}} (data: {{item.data | json}})
-  </label>
-  <form *ngIf="isEditingLabel()" (submit)="setLabel(newLabel.value)">
-    <input #newLabel type="text" [value]="item.label"/>
-  </form>
-  <button (click)="delete()">Delete</button>
-</section>
+<div class="Panel_couleur">
+  <button type="button" name="bouton_vert" (click)="setColor('green')" class="btn_col vert" ></button>
+  <button type="button" name="bouton_orange" (click)="setColor('orange')"class="btn_col orange"></button>
+  <button type="button" name="bouton_rouge" (click)="setColor('red')"class="btn_col rouge"></button>
+</div>
+
+<div class="panel panel-default">
+  <div [style.background-color]="item.data.couleur" class="panel-heading clearfix">
+    <span class="pull-left">{{item.label}}</span>
+    <form *ngIf="isEditingLabel()" (submit)="setItem(newLabel.value, newParticipant.value, newDate.value);" style="margin:15px;">
+      <input #newLabel type="text" [value]="item.label"/>
+      <input #newParticipant type="text" [value]="item.data.participants"/>
+      <input #newDate type="date"   [value]="item.data.dateI"/>
+      <input type="submit" value="OK" />
+    </form>
+
+  </div>
+
+    <div class="btn-group pull-right">
+      <button type="pull-right btn btn-default" title="Modifier Item" (click)="editLabel()" class="btn-default edit"><span class="glyphicon glyphicon-pencil"></span></button>
+      <button type="pull-right btn btn-default" title="Supprimer Item" (click)="delete()" class="btn-default delete" ><span class="glyphicon glyphicon-remove"></span></button>
+      <input #isChecked type="checkbox" [ngModel]="item.checked" (ngModelChange)="check(isChecked.checked)" />
+    </div>
+    <div class="panel-body">
+      <span class="glyphicon glyphicon-user"></span> {{getParticipant()}}
+      <span class="glyphicon glyphicon-calendar"></span> {{getDate()}}
+      <span class="compteRebours"> {{getCompteRebours()}} </span>
+      <br>
+    </div>
+    <button class="btn btn-default" (click)="liftItem()" title="Monter la tâche" ><span class="glyphicon glyphicon-arrow-up"></span></button>
+    <button class="btn btn-default" (click)="dropItem()" title="Descendre la tâche"><span class="glyphicon glyphicon-arrow-down"></span></button>
+</div>

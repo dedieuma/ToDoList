@@ -1,18 +1,41 @@
-<section class="root" [style.backgroundColor]="getColor()">
-  <h3>
-    {{list.name}}
-    <button (click)="delete()">Delete list</button>
-    <input type="color" [ngModel]="getColor()" (ngModelChange)="setColor($event)" />
-  </h3>
-  <form (ngSubmit)="createItem(newItemLabel.value); newItemLabel.value=''">
-    <label>Create a new item:</label>
-    <input type="text" #newItemLabel/>
-  </form>
+
+<section [style.backgroundColor]="getColor()">
+  <nav class="navbar navbar-default">
+    <ul class="nav navbar-nav">
+
+      <li class="dropdown">
+        <a data-toggle="dropdown">Trier <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li class="dropdown-header">Tri Croissant</li>
+          <li><a (click)="list.items.sort(sortByDateAsc);">Par date</a></li>
+          <li><a (click)="list.items.sort(sortByNameAsc);">Par nom</a></li>
+
+          <li class="dropdown-header">Tri Décroissant</li>
+          <li><a (click)="list.items.sort(sortByDateDesc);">Par date</a></li>
+          <li><a (click)="list.items.sort(sortByNameDesc);">Par nom</a></li>
+
+        </ul>
+      </li>
+      <li><input name="name" placeholder="Ajouter un élément..." type="text" #newItemLabel /></li>
+      <li><input placeholder="Ajouter des participants" type="text" #newItemPart/></li>
+      <li><input placeholder="Ajouter une date" type="date" #newItemDate/></li>
+      <li><button class="btn btn-default" (click)="createItem(newItemLabel.value, newItemPart.value, newItemDate.value); newItemLabel.value=''; newItemPart.value=''; newItemDate.value=''">Créer Item</button></li>
+      <li><button class="btn btn-warning" (click)="deleteCheckedItems()">Supprimer Items Cochés</button></li>
+    </ul>
+  </nav>
+  <!--<button type="pull-right button" name="button" (click)="list.items.sort(sortByDate);" class="btn-default">Trier</button>-->
+
   <section class="items">
-    <app-todo-item *ngFor="let item of list.items"
-                   [clock]="item.clock"
-                   [item]="item"
-                   [listId]="list.id">
-    </app-todo-item>
+
+    <!-- AJOUT PANEL GROUP -->
+    <div class="panel-group panel-default">
+      <app-todo-item *ngFor="let item of list.items"
+                     [clock]="item.clock"
+                     [item]="item"
+                     [listId]="list.id">
+      </app-todo-item>
+    </div>
+
   </section>
+
 </section>

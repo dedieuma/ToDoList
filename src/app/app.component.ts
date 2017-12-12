@@ -11,7 +11,7 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  @Input() title = 'Listes de choses à faire';
+  @Input() title = 'ToDoList';
 
   constructor(private tdlService: TodoListService,
               private router: Router) {

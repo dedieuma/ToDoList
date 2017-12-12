@@ -5,7 +5,8 @@ import {
   ItemID, ListID,
   MESSAGE_FOR_SERVER, SERVER_UPDATE_ITEM_CHECK, SERVER_UPDATE_ITEM_LABEL, SERVER_UPDATE_ITEM_DATA,
   MESSAGE_FOR_CLIENT, TODOLISTS_NEW_STATE,
-  TodoListJSON, ItemJSON, TodoListWithItems, SERVER_DELETE_ITEM, SERVER_DELETE_LIST, SERVER_UPDATE_LIST_DATA
+  TodoListJSON, ItemJSON, TodoListWithItems, SERVER_DELETE_ITEM, SERVER_DELETE_LIST, SERVER_UPDATE_LIST_DATA, SERVER_UPDATE_LIST_NAME,
+  dataForItem, dataForListWithItems
 } from "../data/protocol";
 export {
   ItemID, ListID,
@@ -98,7 +99,7 @@ export class TodoListService {
   /*****************************************************************************************************************************************
    * Operations on lists *******************************************************************************************************************
    ****************************************************************************************************************************************/
-  SERVER_CREATE_NEW_LIST(name: string, data: Object = {}): string {
+  SERVER_CREATE_NEW_LIST(name: string, data: dataForListWithItems): string {
     const id = this.getLocalListId();
     this.ListUIs.push({
       name: name,
@@ -125,6 +126,24 @@ export class TodoListService {
     this.ListUIs = this.ListUIs.filter( L => L.id !== ListID );
   }
 
+  SERVER_UPDATE_LIST_NAME(ListID: ListID, title: string) {
+    const op: SERVER_UPDATE_LIST_NAME = {
+      type: "SERVER_UPDATE_LIST_NAME",
+      ListID: ListID,
+      name: title
+    };
+    this.emit(op);
+    this.ListUIs = this.ListUIs.map( L => {
+      if (L.id === ListID) {
+        const  newL = Object.assign({}, L);
+        newL.name = Object.assign({}, newL.name, title);
+        return newL;
+      }else {
+        return L;
+      }
+    });
+  }
+
   SERVER_UPDATE_LIST_DATA(ListID: ListID, data: Object) {
     const op: SERVER_UPDATE_LIST_DATA = {
       type: "SERVER_UPDATE_LIST_DATA",
@@ -143,10 +162,11 @@ export class TodoListService {
     } );
   }
 
+
   /*****************************************************************************************************************************************
    * Operations on items *******************************************************************************************************************
    ****************************************************************************************************************************************/
-  SERVER_CREATE_ITEM(ListID: ListID, label: string, checked: boolean = false, data: Object = {}): string {
+  SERVER_CREATE_ITEM(ListID: ListID, label: string, checked: boolean = false, data: dataForItem): string {
     const id = this.genId.next().value;
     this.emit({
       type: "SERVER_CREATE_ITEM",
@@ -179,7 +199,8 @@ export class TodoListService {
     this.itemsJSON = this.itemsJSON.filter( I => I.id !== ItemID );
   }
 
-  SERVER_UPDATE_ITEM_DATA(ListID: ListID, ItemID: ItemID, data: Object) {
+
+  SERVER_UPDATE_ITEM_DATA(ListID: ListID, ItemID: ItemID, data: dataForItem) {
     const op: SERVER_UPDATE_ITEM_DATA = {
       type: "SERVER_UPDATE_ITEM_DATA",
       ListID: ListID,
@@ -236,7 +257,7 @@ export class TodoListService {
         name: null,
         items: null,
         id: listJSON.id,
-        data: {}
+        data: null
       };
       if (listUI.clock < listJSON.clock) {
         Object.assign(listUI, {
@@ -266,6 +287,7 @@ export class TodoListService {
     return this.ListUIs;
   }
 
+
   emit(msg: MESSAGE_FOR_SERVER, cb?: (response: any) => any) {
     if (this.connected.getValue()) {
       return this.sio.emit("operation", msg, cb);
@@ -278,7 +300,7 @@ export class TodoListService {
     return this.genId.next().value;
   }
 
-  private getList(ListID: ListID): TodoListWithItems {
+  getList(ListID: ListID): TodoListWithItems {
     return this.ListUIs.find( L => L.id === ListID );
   }
 
